@@ -395,3 +395,69 @@ body { font-family: 'Helvetica Neue', Arial, sans-serif; }
   .frame-photo { width: 332px; height: 249px; }
   .progress-wrap { width: 300px; }
 }
+
+/* ── ENVELOPE ── */
+.msg-trigger {
+  border: none;
+  padding: 40px;
+  gap: 24px;
+}
+
+.envelope {
+  width: 120px;
+  height: 84px;
+  position: relative;
+}
+
+.envelope-body {
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  border: 1.5px solid #f4b8c8;
+  border-radius: 4px;
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 4px #fde8ef22;
+}
+
+.envelope-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 60px solid transparent;
+  border-right: 60px solid transparent;
+  border-top: 44px solid #f4b8c8;
+  z-index: 1;
+  border-radius: 2px 2px 0 0;
+  transition: transform 0.4s ease;
+}
+
+.msg-trigger:hover .envelope-flap {
+  transform: rotateX(180deg);
+  transform-origin: top center;
+}
+
+/* V-shape ด้านล่างของ flap */
+.envelope-body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 60px solid transparent;
+  border-right: 60px solid transparent;
+  border-bottom: 42px solid #fce4ec;
+}
+
+.envelope-heart {
+  color: #f4b8c8;
+  font-size: 20px;
+  position: relative;
+  z-index: 1;
+}
