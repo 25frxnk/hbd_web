@@ -360,10 +360,10 @@ function toggleMusic() {
 }
 
 /* ── VISIT COUNTER ── */
-fetch('https://api.countapi.xyz/hit/25frxnk/hbd-web')
+fetch('https://hits.sh/25frxnk.github.io/hbd_web.json')
   .then(r => r.json())
   .then(data => {
-    document.getElementById('visit-count').textContent = data.value.toLocaleString();
+    document.getElementById('visit-count').textContent = Number(data.count).toLocaleString();
   })
   .catch(() => {
     document.getElementById('visit-count').textContent = '—';
