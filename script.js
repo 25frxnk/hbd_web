@@ -368,3 +368,13 @@ fetch('https://api.countapi.xyz/hit/25frxnk/hbd-web')
   .catch(() => {
     document.getElementById('visit-count').textContent = '—';
   });
+
+
+  /* ── PREVENT SAVE IMAGE ── */
+document.addEventListener('contextmenu', e => {
+  if (e.target.tagName === 'IMG') e.preventDefault();
+});
+
+document.addEventListener('dragstart', e => {
+  if (e.target.tagName === 'IMG') e.preventDefault();
+});

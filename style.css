@@ -1,3 +1,10 @@
+/* ── PREVENT SAVE IMAGE ── */
+img {
+  -webkit-user-select: none;
+  user-select: none;
+  pointer-events: none;
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Helvetica Neue', Arial, sans-serif; }
 
@@ -483,6 +490,7 @@ body { font-family: 'Helvetica Neue', Arial, sans-serif; }
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   position: relative;
   flex: 0 0 auto;
+  pointer-events: auto;
 }
 
 .polaroid:hover {
