@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday 22</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- S1 HERO — dark red -->
+<div class="section s1">
+  <div class="hero-deco tl">✦ ✦ ✦</div>
+  <div class="hero-tag">happy birthday</div>
+  <div class="hero-age">22</div>
+  <div class="hero-divider"></div>
+  <div class="hero-wish">
+   ขอให้ปีที่ 22 ของเธอ<br>
+  เต็มไปด้วยเรื่องดีๆ ที่ทำให้ยิ้มได้ในทุกวัน<br>
+
+  ขอให้สิ่งที่ตั้งใจค่อยๆเป็นจริง<br>
+  ได้ทำในสิ่งที่อยากทำ<br>
+
+  เหนื่อยก็พัก ไม่ต้องเก่งตลอดก็ได้<br>
+  ขอให้เธอมีความสุขในแบบของเธอจริงๆ
+  </div>
+  <div class="hero-deco br">✦ ✦ ✦</div>
+  <div class="scroll-hint">
+    <span>scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</div>
+
+<!-- S2 CANDLES — original warm -->
+<div class="section s2">
+  <div class="sec-label">make a wish</div>
+  <div class="candles-row" id="candles-row"></div>
+  <div class="wish-msg" id="wish-msg">กดเทียนแต่ละเล่มเพื่ออธิษฐาน</div>
+  <div class="cake-base">
+    <div class="cake-t"><span class="cake-lbl">22</span></div>
+    <div class="cake-b"><span class="cake-lbl" style="font-size:13px;letter-spacing:.22em">happy birthday</span></div>
+    <div class="cake-plate"></div>
+  </div>
+  <div class="conf-wrap" id="candle-conf"></div>
+</div>
+
+<!-- S3 FILM STRIP — original dark -->
+<div class="section film-section">
+  <div class="film-ui">
+    <div class="film-label">memories — film roll</div>
+    <div class="play-wrap">
+      <button class="play-btn" id="play-btn" onclick="togglePlay()">
+        <div class="play-icon" id="play-icon"></div>
+      </button>
+      <div class="play-label" id="play-label">press play</div>
+    </div>
+    <div class="film-stage" id="film-stage">
+      <div class="film-edge"></div>
+      <div class="film-track-wrap">
+        <div class="film-track" id="film-track"></div>
+      </div>
+      <div class="film-edge"></div>
+    </div>
+    <div class="progress-wrap" id="progress-wrap" onclick="scrubFilm(event)">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <div class="frame-counter" id="frame-counter">01 / 98</div>
+  </div>
+</div>
+
+<!-- S4 MESSAGE — dark red, popup card -->
+<div class="section s4">
+  <div class="sec-label-red">a little message</div>
+  <button class="msg-trigger" onclick="openMsg()">
+    <span class="msg-trigger-icon">✉</span>
+    <span class="msg-trigger-text">open message</span>
+  </button>
+</div>
+
+<!-- POPUP OVERLAY -->
+<div class="popup-overlay" id="popup-overlay" onclick="closeMsg()">
+  <div class="popup-card" id="popup-card" onclick="event.stopPropagation()">
+    <button class="popup-close" onclick="closeMsg()">✕</button>
+    <div class="popup-header">
+      <div class="popup-tag">happy birthday</div>
+      <div class="popup-num">22</div>
+    </div>
+    <div class="popup-divider"></div>
+    <div class="popup-body">
+      สุขสันต์วันเกิดนะ<br><br>
+      ขอบคุณที่เป็นส่วนหนึ่ง<br>
+      ในชีวิตเสมอมา<br><br>
+      ขอให้มีแต่สิ่งดีๆ<br>
+      รออยู่ข้างหน้าเสมอ ✦
+    </div>
+    <div class="popup-footer">with love</div>
+    <div class="conf-wrap" id="popup-conf"></div>
+  </div>
+</div>
+
+
+<!-- AUDIO -->
+<audio id="bgm" loop>
+  <source src="audio/hbd.mp3" type="audio/mpeg" />
+</audio>
+ 
+<!-- STICKY MUSIC BUTTON -->
+<button class="music-btn" id="music-btn" onclick="toggleMusic()" title="play / pause">
+  <svg id="music-icon-play" width="18" height="18" viewBox="0 0 18 18" fill="none">
+    <path d="M5 3L15 9L5 15V3Z" fill="currentColor"/>
+  </svg>
+  <div class="music-bars" id="music-bars">
+    <span></span><span></span><span></span><span></span>
+  </div>
+</button>
+
+<script src="script.js"></script>
+</body>
+</html>
