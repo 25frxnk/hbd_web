@@ -39,6 +39,7 @@ function buildCandles() {
     row.appendChild(w);
   });
 }
+
 function blowCandle(i) {
   const fl = document.getElementById('fl' + i);
   if (fl.classList.contains('out')) return;
@@ -85,6 +86,7 @@ function showCard() {
     });
   });
 }
+
 /* ── FILM STRIP ── */
 const FRAMES = Array.from({ length: 98 }, (_, i) => ({
   src: `access/${i + 1}.jpg`,
@@ -110,7 +112,7 @@ function buildFilm() {
       <div class="sprockets">${holes}</div>
       <div class="frame-photo" style="background:#1a1a18">
         <img
-          src="${f.src}"
+          data-src="${f.src}"
           alt="photo ${i + 1}"
           style="width:100%;height:100%;object-fit:cover;display:block;position:absolute;inset:0"
           onerror="this.style.display='none'"
@@ -120,6 +122,22 @@ function buildFilm() {
       </div>
       <div class="sprockets">${holes}</div>`;
     track.appendChild(frame);
+  });
+}
+
+function lazyLoadFilm() {
+  const stage = document.getElementById('film-stage');
+  const viewStart = filmOffset - FRAME_W * 2;
+  const viewEnd = filmOffset + stage.clientWidth + FRAME_W * 2;
+  document.querySelectorAll('.film-frame').forEach((fr, i) => {
+    const frameStart = i * FRAME_W;
+    if (frameStart >= viewStart && frameStart <= viewEnd) {
+      const img = fr.querySelector('img[data-src]');
+      if (img) {
+        img.src = img.dataset.src;
+        img.removeAttribute('data-src');
+      }
+    }
   });
 }
 
@@ -139,6 +157,7 @@ function updateFilmTransform() {
     const cx = i * FRAME_W + FRAME_W / 2;
     fr.classList.toggle('center-frame', Math.abs(cx - stageCx) < FRAME_W / 2);
   });
+  lazyLoadFilm();
 }
 
 function filmLoop() {
@@ -184,7 +203,23 @@ function scrubFilm(e) {
 /* ── POPUP MESSAGE ── */
 function openMsg() {
   document.getElementById('popup-overlay').classList.add('open');
-  setTimeout(() => shootConf('popup-conf', ['#E50914', '#ffffff', '#b20710', '#ff6666', '#cc0000']), 400);
+  setTimeout(() => {
+    shootConf('popup-conf', ['#E50914', '#ffffff', '#b20710', '#ff6666', '#cc0000']);
+    typePopupText();
+  }, 400);
+}
+
+function typePopupText() {
+  const body = document.querySelector('.popup-body');
+  const text = `สุขสันต์วันเกิดนะ\n\nขอบคุณที่เป็นส่วนหนึ่ง\nในชีวิตเสมอมา\n\nขอให้มีแต่สิ่งดีๆ\nรออยู่ข้างหน้าเสมอ ✦`;
+  body.innerHTML = '';
+  let i = 0;
+  const interval = setInterval(() => {
+    if (i >= text.length) { clearInterval(interval); return; }
+    const ch = text[i];
+    body.innerHTML += ch === '\n' ? '<br>' : ch;
+    i++;
+  }, 40);
 }
 
 function closeMsg() {
@@ -216,34 +251,46 @@ function shootConf(id, colors) {
   }
 }
 
-
 /* ── POLAROID WALL ── */
 function buildPolaroid() {
   const wall = document.getElementById('polaroid-wall');
   const total = 98;
   const count = 18;
 
-  // สุ่มไม่ซ้ำ
   const indices = [];
   while (indices.length < count) {
     const n = Math.floor(Math.random() * total) + 1;
     if (!indices.includes(n)) indices.push(n);
   }
 
-  indices.forEach((n, i) => {
+  indices.forEach((n) => {
     const rot = (Math.random() * 14 - 7).toFixed(1);
     const div = document.createElement('div');
     div.className = 'polaroid';
     div.style.transform = `rotate(${rot}deg)`;
-    div.style.animationDelay = `${i * 0.06}s`;
     div.innerHTML = `
-      <img src="access/${n}.jpg" alt="photo ${n}"
+      <img data-src="access/${n}.jpg" alt="photo ${n}"
            onerror="this.parentElement.style.display='none'"/>
-      <div class="polaroid-label">${String(n).padStart(2,'0')}</div>
+      <div class="polaroid-label">${String(n).padStart(2, '0')}</div>
     `;
     div.onclick = () => showCardFromPolaroid(`access/${n}.jpg`);
     wall.appendChild(div);
   });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target.querySelector('img[data-src]');
+        if (img) {
+          img.src = img.dataset.src;
+          img.removeAttribute('data-src');
+        }
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { rootMargin: '200px' });
+
+  document.querySelectorAll('.polaroid').forEach(p => observer.observe(p));
 }
 
 function showCardFromPolaroid(src) {
@@ -276,13 +323,11 @@ function showCardFromPolaroid(src) {
   });
 }
 
-
-
 /* ── INIT ── */
 buildCandles();
 buildFilm();
 setTimeout(updateFilmTransform, 100);
-buildPolaroid(); 
+buildPolaroid();
 
 /* touch scrub support */
 const progWrap = document.getElementById('progress-wrap');
@@ -313,7 +358,6 @@ function toggleMusic() {
     musicPlaying = true;
   }
 }
-
 
 /* ── VISIT COUNTER ── */
 fetch('https://api.countapi.xyz/hit/25frxnk/hbd-web')
