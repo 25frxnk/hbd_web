@@ -461,3 +461,99 @@ body { font-family: 'Helvetica Neue', Arial, sans-serif; }
   position: relative;
   z-index: 1;
 }
+
+
+/* ── POLAROID WALL ── */
+.s5 { background: #111110; min-height: 100vh; }
+
+.polaroid-wall {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+  max-width: 900px;
+  padding: 20px;
+}
+
+.polaroid {
+  background: #f5f0e8;
+  padding: 12px 12px 36px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.45);
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.polaroid:hover {
+  transform: scale(1.08) rotate(0deg) !important;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+  z-index: 10;
+}
+
+.polaroid img {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  display: block;
+  background: #2a2a28;
+}
+
+.polaroid-label {
+  position: absolute;
+  bottom: 10px;
+  left: 0; right: 0;
+  text-align: center;
+  font-size: 11px;
+  color: #888;
+  letter-spacing: .06em;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* pin */
+.polaroid::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 12px;
+  background: #E50914;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
+
+@media (max-width: 600px) {
+  .polaroid img { width: 120px; height: 120px; }
+  .polaroid-wall { gap: 16px; }
+}
+
+
+/* ── VISIT COUNTER ── */
+.visit-counter {
+  position: fixed;
+  top: 20px;
+  right: 24px;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.07);
+  border: 0.5px solid rgba(255,255,255,0.15);
+  border-radius: 20px;
+  padding: 5px 12px;
+  backdrop-filter: blur(6px);
+}
+.visit-icon {
+  font-size: 9px;
+  color: #ffffff;
+  opacity: 0.4;
+}
+#visit-count {
+  font-size: 11px;
+  color: #ffffff;
+  opacity: 0.6;
+  letter-spacing: .08em;
+  font-family: monospace;
+}

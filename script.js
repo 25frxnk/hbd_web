@@ -39,7 +39,6 @@ function buildCandles() {
     row.appendChild(w);
   });
 }
-
 function blowCandle(i) {
   const fl = document.getElementById('fl' + i);
   if (fl.classList.contains('out')) return;
@@ -50,10 +49,42 @@ function blowCandle(i) {
   setTimeout(() => {
     m.textContent = blown < 5 ? WISHES[blown - 1] : 'ขอให้ทุกคำอธิษฐานเป็นจริงนะ';
     m.style.opacity = '1';
-    if (blown === 5) shootConf('candle-conf', ['#F1DFA3', '#F6C8CC', '#CDB872', '#EF8F9B', '#CAB6B1']);
+    if (blown === 5) {
+      shootConf('candle-conf', ['#F1DFA3', '#F6C8CC', '#CDB872', '#EF8F9B', '#CAB6B1']);
+      setTimeout(showCard, 800);
+    }
   }, 280);
 }
 
+function showCard() {
+  const overlay = document.createElement('div');
+  overlay.id = 'card-overlay';
+  overlay.style.cssText = `
+    position: fixed; inset: 0; z-index: 300;
+    background: rgba(0,0,0,0.75);
+    display: flex; align-items: center; justify-content: center;
+  `;
+  overlay.onclick = () => overlay.remove();
+
+  const img = document.createElement('img');
+  img.src = 'access/card.png';
+  img.style.cssText = `
+    max-width: 88vw; max-height: 88vh;
+    border-radius: 12px;
+    transform: scale(0) rotate(-8deg);
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+  `;
+
+  overlay.appendChild(img);
+  document.body.appendChild(overlay);
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      img.style.transform = 'scale(1) rotate(0deg)';
+    });
+  });
+}
 /* ── FILM STRIP ── */
 const FRAMES = Array.from({ length: 98 }, (_, i) => ({
   src: `access/${i + 1}.jpg`,
@@ -65,7 +96,7 @@ const TOTAL_FRAMES = 98;
 let filmOffset = 0;
 let filmPlaying = false;
 let filmRAF = null;
-let filmSpeed = 0.4;
+let filmSpeed = 2;
 let filmDir = 1;
 
 function buildFilm() {
@@ -185,10 +216,73 @@ function shootConf(id, colors) {
   }
 }
 
+
+/* ── POLAROID WALL ── */
+function buildPolaroid() {
+  const wall = document.getElementById('polaroid-wall');
+  const total = 98;
+  const count = 18;
+
+  // สุ่มไม่ซ้ำ
+  const indices = [];
+  while (indices.length < count) {
+    const n = Math.floor(Math.random() * total) + 1;
+    if (!indices.includes(n)) indices.push(n);
+  }
+
+  indices.forEach((n, i) => {
+    const rot = (Math.random() * 14 - 7).toFixed(1);
+    const div = document.createElement('div');
+    div.className = 'polaroid';
+    div.style.transform = `rotate(${rot}deg)`;
+    div.style.animationDelay = `${i * 0.06}s`;
+    div.innerHTML = `
+      <img src="access/${n}.jpg" alt="photo ${n}"
+           onerror="this.parentElement.style.display='none'"/>
+      <div class="polaroid-label">${String(n).padStart(2,'0')}</div>
+    `;
+    div.onclick = () => showCardFromPolaroid(`access/${n}.jpg`);
+    wall.appendChild(div);
+  });
+}
+
+function showCardFromPolaroid(src) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; inset: 0; z-index: 300;
+    background: rgba(0,0,0,0.85);
+    display: flex; align-items: center; justify-content: center;
+  `;
+  overlay.onclick = () => overlay.remove();
+
+  const img = document.createElement('img');
+  img.src = src;
+  img.style.cssText = `
+    max-width: 88vw; max-height: 88vh;
+    border-radius: 4px;
+    transform: scale(0.85);
+    opacity: 0;
+    transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.6);
+  `;
+  overlay.appendChild(img);
+  document.body.appendChild(overlay);
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      img.style.transform = 'scale(1)';
+      img.style.opacity = '1';
+    });
+  });
+}
+
+
+
 /* ── INIT ── */
 buildCandles();
 buildFilm();
 setTimeout(updateFilmTransform, 100);
+buildPolaroid(); 
 
 /* touch scrub support */
 const progWrap = document.getElementById('progress-wrap');
@@ -219,3 +313,14 @@ function toggleMusic() {
     musicPlaying = true;
   }
 }
+
+
+/* ── VISIT COUNTER ── */
+fetch('https://api.countapi.xyz/hit/25frxnk/hbd-web')
+  .then(r => r.json())
+  .then(data => {
+    document.getElementById('visit-count').textContent = data.value.toLocaleString();
+  })
+  .catch(() => {
+    document.getElementById('visit-count').textContent = '—';
+  });
