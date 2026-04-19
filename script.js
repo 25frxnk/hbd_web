@@ -360,14 +360,14 @@ function toggleMusic() {
 }
 
 /* ── VISIT COUNTER ── */
-fetch('https://hits.sh/25frxnk.github.io/hbd_web.json')
-  .then(r => r.json())
-  .then(data => {
-    document.getElementById('visit-count').textContent = Number(data.count).toLocaleString();
-  })
-  .catch(() => {
-    document.getElementById('visit-count').textContent = '—';
-  });
+// fetch('https://hits.sh/25frxnk.github.io/hbd_web.json')
+//   .then(r => r.json())
+//   .then(data => {
+//     document.getElementById('visit-count').textContent = Number(data.count).toLocaleString();
+//   })
+//   .catch(() => {
+//     document.getElementById('visit-count').textContent = '—';
+//   });
 
 
   /* ── PREVENT SAVE IMAGE ── */
